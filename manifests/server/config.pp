@@ -28,18 +28,27 @@ class mcollective::server::config {
     value => $mcollective::server_loglevel,
   }
 
-  file { "${mcollective::confdir}/policies":
-    ensure => 'directory',
-    owner  => 'root',
-    group  => '0',
-    mode   => '0700',
-  }
-
-  file { $mcollective::ssldir:
+  file { $mcollective::confdir:
     ensure => 'directory',
     owner  => 'root',
     group  => '0',
     mode   => '0755',
+  }
+
+  file { "${mcollective::confdir}/policies":
+    ensure  => 'directory',
+    owner   => 'root',
+    group   => '0',
+    mode    => '0700',
+    require => File[$mcollective::confdir],
+  }
+
+  file { $mcollective::ssldir:
+    ensure  => 'directory',
+    owner   => 'root',
+    group   => '0',
+    mode    => '0755',
+    require => File[$mcollective::confdir],
   }
 
   if $::mcollective::middleware_ssl {
